@@ -1,0 +1,761 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Anika Sambu — Portfolio</title>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --bg: #0f1724;
+        --card: #0b1220;
+        --accent: #1fb6ff;
+        --muted: #94a3b8;
+        --glass: rgba(255, 255, 255, 0.03);
+        --radius: 14px;
+        --max-width: 1200px;
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        background: linear-gradient(180deg, #071022 0%, #08111b 100%);
+        color: #e6eef6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        font-size: 16px;
+        overflow-x: hidden;
+      }
+
+      /* Hamburger Button */
+      .hamburger {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1001;
+        background: linear-gradient(135deg, var(--accent), #7b61ff);
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        box-shadow: 0 4px 20px rgba(31, 182, 255, 0.3);
+        transition: transform 0.3s ease;
+      }
+
+      .hamburger:hover {
+        transform: scale(1.05);
+      }
+
+      .hamburger span {
+        width: 24px;
+        height: 3px;
+        background: #021;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+      }
+
+      .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(7px, 7px);
+      }
+
+      .hamburger.active span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+      }
+
+      /* Overlay */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+
+      .overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      /* SIDEBAR */
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: -300px;
+        width: 280px;
+        height: 100vh;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.04),
+          rgba(0, 0, 0, 0.04)
+        );
+        padding: 80px 20px 20px;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        box-shadow: 4px 0 30px rgba(2, 6, 23, 0.8);
+        border-right: 1px solid rgba(255, 255, 255, 0.06);
+        overflow-y: auto;
+        transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .sidebar.active {
+        left: 0;
+      }
+
+      .profile {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .avatar {
+        width: 64px;
+        height: 64px;
+        border-radius: 12px;
+        flex-shrink: 0;
+        background: linear-gradient(135deg, var(--accent), #7b61ff);
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        color: #021;
+        border: 2px solid rgba(255, 255, 255, 0.06);
+        overflow: hidden;
+      }
+
+      .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .pinfo h3 {
+        margin: 0;
+        font-size: 18px;
+      }
+
+      .pinfo small {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .nav {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 6px;
+      }
+
+      .nav a {
+        color: var(--muted);
+        text-decoration: none;
+        padding: 10px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.2s ease;
+      }
+
+      .nav a.active,
+      .nav a:hover {
+        color: #e6f8ff;
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      .sidebar .meta {
+        margin-top: auto;
+        font-size: 14px;
+        color: var(--muted);
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      /* MAIN CONTENT */
+      .main {
+        width: 100%;
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 32px;
+      }
+
+      .section {
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        border-radius: var(--radius);
+        padding: 36px;
+        margin-bottom: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.02);
+      }
+
+      .section h1 {
+        font-family: "Playfair Display", serif;
+        margin: 0 0 16px 0;
+        font-size: 42px;
+        line-height: 1.1;
+      }
+
+      .section h2 {
+        font-family: "Playfair Display", serif;
+        margin: 0 0 20px 0;
+        font-size: 32px;
+        color: var(--accent);
+      }
+
+      .section h3 {
+        margin: 24px 0 12px 0;
+        font-size: 20px;
+      }
+
+      .section p {
+        color: var(--muted);
+        line-height: 1.7;
+        margin-bottom: 16px;
+      }
+
+      .section ul {
+        color: var(--muted);
+        line-height: 1.8;
+      }
+
+      .section ul li {
+        margin-bottom: 8px;
+      }
+
+      /* HOME SECTION - with photo */
+      .hero-content {
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        gap: 32px;
+        align-items: start;
+      }
+
+      .hero-photo {
+        width: 180px;
+        height: 180px;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 3px solid rgba(31, 182, 255, 0.3);
+        box-shadow: 0 8px 32px rgba(31, 182, 255, 0.2);
+        flex-shrink: 0;
+      }
+
+      .hero-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .hero-text h1 {
+        margin-top: 0;
+      }
+
+      .hero-actions {
+        margin-top: 18px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 12px 20px;
+        border-radius: 10px;
+        border: 0;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 15px;
+        transition: all 0.2s ease;
+      }
+
+      .btn-primary {
+        background: linear-gradient(90deg, var(--accent), #7b61ff);
+        color: #021;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(31, 182, 255, 0.4);
+      }
+
+      .btn-ghost {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--muted);
+      }
+
+      .btn-ghost:hover {
+        background: rgba(255, 255, 255, 0.02);
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+
+      .journey-box {
+        margin-top: 24px;
+        padding: 20px;
+        background: rgba(31, 182, 255, 0.05);
+        border-radius: 12px;
+        border: 1px solid rgba(31, 182, 255, 0.1);
+      }
+
+      .journey-box h3 {
+        margin: 0 0 8px 0;
+        font-size: 18px;
+      }
+
+      .reading-card {
+        margin-top: 24px;
+        padding: 20px;
+        background: var(--card);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.02);
+        text-align: center;
+      }
+
+      .reading-card img {
+        width: 120px;
+        height: 120px;
+        border-radius: 12px;
+        object-fit: cover;
+        margin-bottom: 12px;
+        border: 2px solid rgba(255, 255, 255, 0.06);
+      }
+
+      /* Skills Tags */
+      .tags {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+      }
+
+      .tag {
+        background: rgba(31, 182, 255, 0.08);
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-size: 14px;
+        color: #e6f8ff;
+        border: 1px solid rgba(31, 182, 255, 0.15);
+      }
+
+      /* Contact */
+      .contact-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+        margin-top: 20px;
+      }
+
+      .contact-item {
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+      }
+
+      .contact-item strong {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--accent);
+      }
+
+      .social-links {
+        display: flex;
+        gap: 16px;
+        margin-top: 20px;
+      }
+
+      .social-links a {
+        color: var(--muted);
+        font-size: 24px;
+        transition: all 0.2s ease;
+      }
+
+      .social-links a:hover {
+        color: var(--accent);
+        transform: translateY(-3px);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .main {
+          padding: 20px;
+        }
+
+        .section {
+          padding: 24px;
+        }
+
+        .section h1 {
+          font-size: 32px;
+        }
+
+        .section h2 {
+          font-size: 26px;
+        }
+
+        .hero-content {
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+
+        .hero-photo {
+          width: 150px;
+          height: 150px;
+          margin: 0 auto;
+        }
+
+        .hero-actions {
+          justify-content: center;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hamburger {
+          width: 45px;
+          height: 45px;
+        }
+
+        .sidebar {
+          width: 260px;
+          left: -260px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Hamburger Button -->
+    <button class="hamburger" onclick="toggleSidebar()" id="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Overlay -->
+    <div class="overlay" onclick="toggleSidebar()" id="overlay"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="profile">
+        <div class="avatar">
+          <img src="photo_2025-11-03_19-56-54.jpg" alt="Anika Sambu" />
+        </div>
+        <div class="pinfo">
+          <h3>ANIKA SAMBU</h3>
+          <small>AIML Student & Passionate Reader</small>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="#home" class="active" onclick="closeNav(event)">
+          <i class="fa fa-home"></i> Home
+        </a>
+        <a href="#about" onclick="closeNav(event)">
+          <i class="fa fa-user"></i> About
+        </a>
+        <a href="#education" onclick="closeNav(event)">
+          <i class="fa fa-graduation-cap"></i> Education
+        </a>
+        <a href="#certificates" onclick="closeNav(event)">
+          <i class="fa fa-certificate"></i> Certificates
+        </a>
+        <a href="#skills" onclick="closeNav(event)">
+          <i class="fa fa-code"></i> Skills
+        </a>
+        <a href="#contact" onclick="closeNav(event)">
+          <i class="fa fa-envelope"></i> Contact
+        </a>
+      </nav>
+
+      <div class="meta">
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <div
+            style="
+              width: 40px;
+              height: 40px;
+              border-radius: 10px;
+              background: linear-gradient(135deg, var(--accent), #7b61ff);
+              display: grid;
+              place-items: center;
+              font-weight: 700;
+              color: #021;
+            "
+          >
+            AS
+          </div>
+          <div>
+            <div style="font-weight: 600">Available for work</div>
+            <small style="color: var(--muted)">Open to collaborations</small>
+          </div>
+        </div>
+
+        <div style="margin-top: 12px; color: var(--muted); font-size: 13px;">
+          Follow me
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 8px;">
+          <a
+            href="https://www.linkedin.com/in/anika-sambu-1a0485329"
+            target="_blank"
+            style="color: var(--muted); font-size: 20px;"
+          >
+            <i class="fa-brands fa-linkedin"></i>
+          </a>
+          <a
+            href="https://www.instagram.com/anika_sambu"
+            target="_blank"
+            style="color: var(--muted); font-size: 20px;"
+          >
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+          <a
+            href="https://github.com/Anix-2006"
+            target="_blank"
+            style="color: var(--muted); font-size: 20px;"
+          >
+            <i class="fa-brands fa-github"></i>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+      <!-- HOME SECTION -->
+      <section id="home" class="section">
+        <div class="hero-content">
+          <div class="hero-photo">
+            <img src="photo_2025-11-03_19-56-54.jpg" alt="Anika Sambu" />
+          </div>
+          <div class="hero-text">
+            <h1>
+              Creative Coder & <span style="color: var(--accent)">Space Enthusiast</span>
+            </h1>
+            <p>
+              I love bringing ideas to life through code — guided by my curiosity
+              for technology, stories, and the universe beyond. Currently pursuing
+              <strong>B.Tech — Computer Science (AIML)</strong>.
+            </p>
+
+            <div class="hero-actions">
+              <button class="btn btn-primary" onclick="document.getElementById('skills').scrollIntoView({behavior:'smooth'})">
+                View My Skills
+              </button>
+              <button class="btn btn-ghost" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+                Get In Touch
+              </button>
+            </div>
+
+            <div class="journey-box">
+              <h3>My Journey</h3>
+              <p style="color: var(--muted); font-size: 14px; margin: 0;">
+                I'm currently pursuing my studies and building my skills through
+                personal projects, exploration, and continuous learning.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT SECTION -->
+      <section id="about" class="section">
+        <h2>About Me</h2>
+        <p>
+          Hi! I'm Anika — a B.Tech student specializing in Artificial Intelligence
+          and Machine Learning, and also pursuing an online degree in Data Science.
+          I'm deeply interested in the intersection of AI and Astronomy, fascinated
+          by deep neural networks, and always eager to learn something new every day.
+          Outside academics, I love reading and discovering new perspectives
+          through books.
+        </p>
+      </section>
+
+      <!-- EDUCATION SECTION -->
+      <section id="education" class="section">
+        <h2>Education</h2>
+        <ul>
+          <li>
+            <strong>B.Tech - Computer Science (AIML)</strong><br/>
+            Methodist College of Engineering and Technology
+          </li>
+          <li>
+            <strong>Online Degree - Data Science</strong><br/>
+            IIT Madras
+          </li>
+          <li>
+            <strong>Intermediate - MPC</strong><br/>
+            Nine Education Junior College
+          </li>
+          <li>
+            <strong>School</strong><br/>
+            St. Anthony's High School
+          </li>
+        </ul>
+      </section>
+
+      <!-- CERTIFICATES SECTION -->
+      <section id="certificates" class="section">
+        <h2>Certificates</h2>
+        <ul>
+          <li>
+            <strong>Advanced Google Analytics</strong><br/>
+            Google Analytics Academy
+          </li>
+          <li>
+            <strong>Supervised Machine Learning</strong><br/>
+            Coursera
+          </li>
+          <li>
+            <strong>Quantum Computing</strong><br/>
+            CDAC
+          </li>
+        </ul>
+      </section>
+
+      <!-- SKILLS SECTION -->
+      <section id="skills" class="section">
+        <h2>Skills</h2>
+        <div class="tags">
+          <div class="tag">Python</div>
+          <div class="tag">C/C++</div>
+          <div class="tag">Machine Learning</div>
+          <div class="tag">Deep Learning</div>
+          <div class="tag">Data Analysis</div>
+          <div class="tag">HTML</div>
+          <div class="tag">CSS</div>
+          <div class="tag">Teamwork</div>
+          <div class="tag">Adaptability</div>
+          <div class="tag">Git & GitHub</div>
+          <div class="tag">Problem Solving</div>
+          <div class="tag">Astronomy Enthusiasm 🚀</div>
+        </div>
+      </section>
+
+      <!-- CONTACT SECTION -->
+      <section id="contact" class="section">
+        <h2>Contact</h2>
+        <p>
+          Feel free to reach out — I'm open to collaborations and discussions.
+        </p>
+
+        <div class="contact-grid">
+          <div class="contact-item">
+            <strong>Email</strong>
+            <div style="color: var(--muted);">anikasambu@gmail.com</div>
+          </div>
+          <div class="contact-item">
+            <strong>Location</strong>
+            <div style="color: var(--muted);">Hyderabad, Telengana</div>
+          </div>
+        </div>
+
+        <div class="social-links">
+          <a href="https://www.linkedin.com/in/anika-sambu-1a0485329" target="_blank">
+            <i class="fa-brands fa-linkedin"></i>
+          </a>
+          <a href="https://www.instagram.com/anika_sambu" target="_blank">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+          <a href="https://github.com/Anix-2006" target="_blank">
+            <i class="fa-brands fa-github"></i>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // Toggle sidebar
+      function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const hamburger = document.getElementById('hamburger');
+        
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        hamburger.classList.toggle('active');
+      }
+
+      // Close navigation when clicking a link
+      function closeNav(event) {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const hamburger = document.getElementById('hamburger');
+        
+        // Update active state
+        document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+        event.target.closest('a').classList.add('active');
+        
+        // Close sidebar
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        hamburger.classList.remove('active');
+      }
+
+      // Update active nav on scroll
+      window.addEventListener('scroll', () => {
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav a');
+        
+        let current = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          if (scrollY >= sectionTop - 100) {
+            current = section.getAttribute('id');
+          }
+        });
+        
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active');
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
